@@ -1,0 +1,125 @@
+#!/usr/bin/perl
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# This program was written while working at Black Box Computer Consulting
+# and allowed to be GPL'd under express permission of the current president
+# John Guttridge
+# Dated Febuary 4th 2012
+#
+
+use strict;
+use Getopt::Std;
+
+
+my %opts;
+getopts('d:D:i:o:e:h', \%opts);
+
+sub show_help {
+  print "usage:\n";
+  print "  [-d input_delim]       input delimeter (default \"\\t\")\n";
+  print "  [-D output_delim]      output delimeter (default ' ')\n";
+  print "  [-e record_enclose]    record enclosure (default '\"')\n";
+  print "  [-r]                   right justify (default left justify)\n";
+  print "  [-i input_file]        input file (default to STDIN)\n";
+  print "  [-o output_file]       output file (default to STDOUT)\n";
+}
+
+if ($opts{'h'}) { show_help(); exit(0); }
+
+my ($is_stdin, $is_stdout) = (1, 1);
+my ($i, $j, $k, $n)=0;
+my @a;                                          # temporary array storage for input lines
+my @mfl;                                        # maximum field length
+
+my ($d, $D, $re) = ("\t", " ", '"');
+my $left_justify=1;
+
+$d = $opts{'d'} if ($opts{'d'});                # input delimeter
+$D = $opts{'D'} if ($opts{'D'});                # output delimeter
+$left_justify=0 if ($opts{'r'});                # left or right justify
+$re = $opts{'e'} if ($opts{'e'});               # input record encapsulator
+
+my ($ifh, $ofh);
+if ($opts{'i'}) { open $ifh, $opts{'i'} or die $!; $is_stdin=0; }
+else { $ifh = *STDIN; }
+if ($opts{'o'}) { open $ofh, '>', $opts{'o'} or die $!; $is_stdout=0; }
+else { $ofh = *STDOUT; }
+
+
+
+$n=0;
+
+while (<$ifh>) {
+  chomp;
+  $a[$n++]=$_;
+
+  my @tl;
+  my @field;
+
+  my $continued_record=0;
+
+  my @t;
+  my @s = split(/\Q$d\E/, $_);
+  for ($i=$k=0; $i<scalar(@s); $i++) {
+    $tl[$i] = 0;
+    $field[$i] = '';
+    if ($continued_record) {
+      $t[$k] .= $d . $s[$i];
+      $continued_record = 0 if $s[$i] =~ /\Q$re\E$/;
+    } else {
+      $t[$k] = $s[$i];
+      $continued_record = 1 if $s[$i] =~ /^\Q$re\E/;
+    }
+    $field[$k] .= $s[$i];
+    $field[$k] .= $d if $continued_record;
+    $tl[$k] ++ if $continued_record;
+    $tl[$k] += length($s[$i]);
+    $k++ if !$continued_record;
+  }
+
+  for ($i=0; $i<scalar(@t); $i++) {
+    $mfl[$i] = ($tl[$i]) if (!defined($mfl[$i]) || ($mfl[$i] < ($tl[$i])));
+  }
+
+}
+
+for ($i=0; $i<$n; $i++) {
+  my $continued_record=0;
+  my @t;
+  my @s = split(/\Q$d\E/, $a[$i]);
+
+  for ($j=$k=0; $j<scalar(@s); $j++) {
+    if ($continued_record) {
+      $t[$k] .= $d . $s[$j];
+      $continued_record = 0 if $s[$j] =~ /\Q$re\E$/;
+    } else {
+      $t[$k] = $s[$j];
+      $continued_record = 1 if $s[$j] =~ /^\Q$re\E/;
+    }
+    $k++ if !$continued_record;
+  }
+
+  for ($j=0; $j<scalar(@t); $j++) {
+    print $ofh $t[$j] if ($left_justify);
+    for ($k=0; $k<($mfl[$j]-length($t[$j])); $k++) { print $ofh ' '; }
+    print $ofh $t[$j] if (!$left_justify);
+    print $ofh $D;
+  }
+  print $ofh "\n";
+}
+
+close $ifh if !$is_stdin;
+close $ofh if !$is_stdout;
+

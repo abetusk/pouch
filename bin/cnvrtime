@@ -1,0 +1,40 @@
+#!/usr/bin/perl
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# This program was written while working at Black Box Computer Consulting
+# and allowed to be GPL'd under express permission of the current president
+# John Guttridge
+# Dated Febuary 4th 2012
+#
+
+use Time::Local;
+
+my $t = ($ARGV[0] || time);
+
+#  0    1    2     3     4    5     6     7     8
+#($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+
+
+if ($t =~ /^\d+$/) {
+  my @a = localtime($t);
+  print sprintf('%04d-%02d-%02d %02d:%02d:%02d', $a[5]+1900, $a[4]+1, $a[3], $a[2], $a[1], $a[0]), "\n";
+} elsif ($t =~ /^(\d{4})[\-\/](\d?\d)[\-\/](\d?\d) (\d\d):(\d\d):(\d\d)/) {
+  my ($yr, $mo, $dy, $hr, $mn, $sc) = ($1, $2, $3, $4, $5, $6);
+  $yr -= 1900;
+  $mo -= 1;
+  print timelocal($sc, $mn, $hr, $dy, $mo, $yr), "\n";
+} else {
+  die "bad format for time '$t'";
+}

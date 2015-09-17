@@ -1,0 +1,24 @@
+#!/bin/bash
+
+dt="$1"
+fn="$HOME/bin/todo.json"
+
+if [ "$dt" == "all" ]
+then
+  while read line
+  do
+    echo -e "\n>> $line"
+    jq -r '.["'$line'"].list[]' "$fn" | sed 's/^/  /'
+  done < <( jq -r '. | keys[]' "$fn" | sort  )
+  exit
+fi
+
+if [ "$dt" == "now" ] || [ "$dt" == "today" ]
+then
+  dt=`date '+%Y-%d-%m'`
+else
+  dt=`jq -r '. | keys[]' "$fn" | sort | head -n1`
+fi
+
+echo -e "\n>> $dt"
+jq '.["'$dt'"].list' "$fn"

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+at 7:00 AM < $HOME/bin/alarm

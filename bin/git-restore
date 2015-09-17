@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Pilfered from Manu from stackoverflow: http://stackoverflow.com/questions/953481/restore-a-deleted-file-in-a-git-repo
+#
+
+
+for f in `git ls-files -d`
+do
+
+  echo restoring $f
+  git checkout -- $f
+
+done
+
+

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+b="$1"
+if [ "$b" == "" ]
+then
+  echo provide branch name
+  exit 1
+fi
+
+git branch -d "$b"
+git push origin :$b
+

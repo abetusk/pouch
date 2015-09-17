@@ -1,0 +1,6 @@
+#!/bin/bash
+
+dockid=`docker ps | cut -f1 -d' ' | tail -n1`
+dockpid=$(docker inspect --format {{.State.Pid}} $dockid )
+nsenter --target $dockpid --mount --uts --ipc --net --pid
+

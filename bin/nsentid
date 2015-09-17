@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ "$1" == "" ]
+then
+  echo "provide id"
+  exit 1
+fi
+
+#dockid=`docker ps | cut -f1 -d' ' | tail -n1`
+dockid=$1
+dockpid=$(docker inspect --format {{.State.Pid}} $dockid )
+nsenter --target $dockpid --mount --uts --ipc --net --pid
+
