@@ -114,7 +114,7 @@ fi
 
 alias l='ls -laF --color=auto'
 alias clean='rm -f *~ .*~'
-alias dum='du --max-depth=1 -h'
+alias dud='du --max-depth=1 -h'
 
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/.go
