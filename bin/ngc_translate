@@ -23,6 +23,7 @@ sub usage
   print " [-y y]                y translation amount\n";
   print " [-z z]                z translation amount\n";
   print " [-s s]                x,y,z scaling factor\n";
+  print " [-C]                  output comment header in ngc file (GRBL style)\n";
   print " [-h|--help]           help (this screen)\n";
   print " [--version]           print version string\n";
   return 1;
@@ -37,7 +38,7 @@ usage() and exit(0) if (scalar(@ARGV) == 0);
 open(my $FH_INP, "-");
 open(my $FH_OUT, ">-");
 my %opts;
-getopts("f:o:x:y:z:s:h", \%opts);
+getopts("f:o:x:y:z:s:Ch", \%opts);
 
 my $x_shift = 0.0;
 my $y_shift = 0.0;
@@ -51,6 +52,9 @@ $x_shift = $opts{x} if ($opts{x});
 $y_shift = $opts{y} if ($opts{y});
 $z_shift = $opts{z} if ($opts{z});
 $s_scale = $opts{s} if ($opts{s});
+
+my $show_comments=0;
+if (exists($opts{C})) { $show_comments=1; }
 
 my @gcode;
 while (<$FH_INP>)
@@ -83,7 +87,9 @@ $state{z_dir} = 0;
 my $op;
 my $operand;
 
-print $FH_OUT "( x_shift $x_shift, y_shift $y_shift, z_shift $z_shift, s_scale $s_scale )\n";
+if ($show_comments) {
+  print $FH_OUT "( x_shift $x_shift, y_shift $y_shift, z_shift $z_shift, s_scale $s_scale )\n";
+}
 
 foreach my $line (@gcode)
 {
