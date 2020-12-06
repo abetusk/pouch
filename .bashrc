@@ -134,3 +134,10 @@ alias gitmerge='git merge --no-ff'
 alias cd..='cd ..'
 
 xset -dpms s off
+
+cpl() {
+  local src="$1" dst="$2"
+  cp -- "$src" "$dst"
+}
+
+alias trim="sed 's/^ *\(.*\) *$/\1/'"
