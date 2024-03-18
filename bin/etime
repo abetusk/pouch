@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# To the extent possible under law, the person who associated CC0 with
+# this file has waived all copyright and related or neighboring rights
+# to this file.
+# 
+# You should have received a copy of the CC0 legalcode along with this
+# work. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+#
+
+prog="$1"
+pid=$$
+
+if [[ "$prog" == "" ]] ; then
+  ps -o etime
+else 
+
+  p=`pidof "$prog"`
+
+  for x in $p ; do
+    echo -e $x ; ps -o etime -p $x
+    echo ""
+  done
+
+
+#  pfx="${prog:0:1}"
+#  sfx="${prog:1}"
+#  ps aux | grep -v $pid | grep -P '['"$pfx"']'"$sfx" | \
+#    sed 's/  */ /g' | \
+#    cut -f2 -d' ' | \
+#    xargs -n1 -I{} ps -o etime -p {}
+
+fi
+
+
+

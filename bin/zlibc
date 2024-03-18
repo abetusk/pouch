@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# CC-BY-SA https://unix.stackexchange.com/a/49066
+# SenhorLucas
+#
+
+fn="$1"
+if [[ "$fn" == "" ]] ; then
+  echo "provide filename"
+  exit 1
+fi
+
+cat "$fn" | \
+  pigz -z -f | \
+  tail -c +9
+
+#cat "$fn" | \
+#  gzip -c | \
+#  tail -c +9
+

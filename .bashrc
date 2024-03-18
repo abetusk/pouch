@@ -141,3 +141,9 @@ cpl() {
 }
 
 alias trim="sed 's/^ *\(.*\) *$/\1/'"
+
+alias inf="uname -sr && uptime && lscpu | grep --color=never -P 'CPU MHz|^CPU\(s\):|Model' && free -mh | head -n2"
+alias lsd="ls -d */"
+function cl {
+  echo "scale=5; $@" | bc -l
+}

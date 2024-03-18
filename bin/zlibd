@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# CC-BY-SA https://unix.stackexchange.com/a/49066
+# wkpark
+#
+
+fn="$1"
+if [[ "$fn" == "" ]] ; then
+  echo "provide filename"
+  exit 1
+fi
+
+printf "\x1f\x8b\x08\x00\x00\x00\x00\x00" | \
+  cat - "$fn" | \
+  gzip -dc
