@@ -127,7 +127,7 @@ alias gitresethard=' git fetch ; git reset --hard origin/master'
 
 $HOME/bin/motd
 
-alias gitlog='git log --decorate=full --graph'
+alias gitlog='git log --decorate=full --graph --name-only'
 
 alias gitmerge='git merge --no-ff'
 
