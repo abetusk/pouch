@@ -1,0 +1,58 @@
+#!/bin/bash
+#
+## https://superuser.com/a/612483
+## CC-BY-SA https://superuser.com/users/84963/adobe
+##
+
+## format is "HH:MM:SS"
+##
+
+countdown()
+(
+  IFS=:
+  set -- $*
+  secs=$(( ${1#0} * 3600 + ${2#0} * 60 + ${3#0} ))
+  while [ $secs -gt 0 ]
+  do
+    sleep 1 &
+    printf "\r%02d:%02d:%02d" $((secs/3600)) $(( (secs/60)%60)) $((secs%60))
+    secs=$(( $secs - 1 ))
+    wait
+  done
+  echo
+)
+
+
+usage()
+(
+	echo ""
+	echo "countdown usge:"
+	echo ""
+	echo "   HH:MM:SS"
+	echo ""
+)
+
+stim="$1"
+
+if [[ "$stim" == "" ]] ; then
+  usage
+  exit 0
+fi
+
+n=`echo "$stim" | sed 's/:/\n/g' | wc -l`
+
+if [[ "$n" -eq 0 ]] ; then
+  usage
+  exit 0
+elif [[ "$n" -eq 1 ]] ; then
+  countdown "00:00:$stim"
+elif [[ "$n" -eq 2 ]] ; then
+  countdown "00:$stim"
+elif [[ "$n" -eq 3 ]] ; then
+  countdown "$stim"
+else
+  m=`echo "$n - 3 + 1" | bc`
+  t=`echo "$stim" | cut -f${m}- -d':'`
+  countdown "$t"
+fi
+
