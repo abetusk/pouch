@@ -1,0 +1,37 @@
+#!/usr/bin/python3
+#
+# To the extent possible under law, the person who associated CC0 with
+# this file has waived all copyright and related or neighboring rights
+# to this file.
+#
+# You should have received a copy of the CC0 legalcode along with this
+# work. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+#
+
+import sys
+
+NATO = {
+  'a': 'alfa',  'b': 'bravo',    'c': 'charlie', 'd': 'delta',   'e': 'echo',  'f': 'foxtrot',
+  'g': 'golf',  'h': 'hotel',    'i': 'india',   'j': 'juliett', 'k': 'kilo',  'l': 'lima',
+  'm': 'mike',  'n': 'november', 'o': 'oscar',   'p': 'papa',    'q': 'quebec','r': 'romeo',
+  's': 'sierra','t': 'tango',    'u': 'uniform', 'v': 'victor',  'w': 'whisky','x': 'xray',
+  'y': 'yankee','z': 'zulu',
+
+  'A': 'alfa',  'B': 'bravo',    'C': 'charlie', 'D': 'delta',   'E': 'echo',  'F': 'foxtrot',
+  'G': 'golf',  'H': 'hotel',    'I': 'india',   'J': 'juliett', 'K': 'kilo',  'L': 'lima',
+  'M': 'mike',  'N': 'november', 'O': 'oscar',   'P': 'papa',    'Q': 'quebec','R': 'romeo',
+  'S': 'sierra','T': 'tango',    'U': 'uniform', 'V': 'victor',  'W': 'whisky','X': 'xray',
+  'Y': 'yankee','Z': 'zulu',
+
+}
+
+for w in sys.argv[1:]:
+
+  S = []
+  for idx in range(len(w)):
+    if w[idx] in NATO:
+      S.append( NATO[w[idx]] )
+    else:
+      S.append(w[idx])
+  print( w + ":", " ".join(S) )
+
