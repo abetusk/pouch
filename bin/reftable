@@ -1,0 +1,135 @@
+#!/usr/bin/python3
+#
+# To the extent possible under law, the person who associated CC0 with
+# this file has waived all copyright and related or neighboring rights
+# to this file.
+#
+# You should have received a copy of the CC0 legalcode along with this
+# work. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+#
+
+import sys
+
+OP = 'all'
+
+
+if len(sys.argv) > 1:
+  OP = sys.argv[1]
+
+
+
+def s_pad(s, l, lr='l'):
+  n = len(s)
+  if n < l:
+    if (lr == 'l'):
+      return ' '*(l-n) + s
+    else:
+      return s + ' '*(l-n)
+
+  return s
+
+
+def print_help():
+  print("\nreftable - print convenient reference tables (NATO, metric, electro magentism spectrum).")
+  print("")
+  print("usage:")
+  print("")
+  print("  reftable [all|nato|metric|em|help]")
+  print("")
+
+
+def print_nato():
+  NATO = [
+    'alfa',  'bravo',    'charlie', 'delta',   'echo',  'foxtrot',
+    'golf',  'hotel',    'india',   'juliett', 'kilo',  'lima',
+    'mike',  'november', 'oscar',   'papa',    'quebec','romeo',
+    'sierra','tango',    'uniform', 'victor',  'whisky','xray',
+    'yankee','zulu' ]
+
+  ncol = 7
+
+  col_width = 0
+  for i in range(len(NATO)):
+    col_width = max( len(NATO[i]), col_width )
+
+  print("\nNATO:\n")
+
+  pfx = "  "
+
+  _row = []
+  for idx in range(len(NATO)):
+    c = idx % ncol
+    _row.append( s_pad(NATO[idx], col_width, 'r') )
+    if len(_row) == ncol:
+      print( pfx + " ".join(_row) )
+      _row = []
+  if len(_row) > 0:
+    print( pfx + " ".join(_row))
+
+  print("")
+
+
+def print_metric():
+
+  metric_table = [
+    [ "name", "symbol", "base10", "decimal" ],
+    [ "quetta" , "Q", "10^30", "1000000000000000000000000000000" ],
+    [ "roona", "R", "10^27", "1000000000000000000000000000" ],
+    [ "yotta", "Y", "10^24", "1000000000000000000000000" ],
+    [ "zetta", "Z", "10^21", "1000000000000000000000" ],
+    [ "exa", "E", "10^18", "1000000000000000000" ],
+    [ "peta", "P", "10^15", "1000000000000000" ],
+    [ "tera", "T", "10^12", "1000000000000" ],
+    [ "giga", "G", "10^9", "1000000000" ],
+    [ "mega", "M", "10^6", "1000000" ],
+    [ "kilo", "k", "10^3", "1000" ],
+    [ "hecto", "h", "10^2", "100" ],
+    [ "deca", "da", "10^1", "10" ],
+    [ "-", "-", "10^0", "1" ],
+    [ "deci", "d", "10^-1", "0.1" ],
+    [ "centi", "c", "10^-2", "0.01" ],
+    [ "milli", "m", "10^-3", "0.001" ],
+    [ "micro", "\mu", "10^-6", "0.000001" ],
+    [ "nano", "n", "10^-9", "0.000000001" ],
+    [ "pico", "p", "10^-12", "0.000000000001" ],
+    [ "femto", "f", "10^-15", "0.000000000000001" ],
+    [ "atto", "a", "10^-18", "0.000000000000000001" ],
+    [ "zepto", "z", "10^-21", "0.000000000000000000001" ],
+    [ "yocto", "y", "10^-24", "0.000000000000000000000001" ],
+    [ "ronto", "r", "10^-27", "0.000000000000000000000000001" ],
+    [ "quecto", "q", "10^-30", "0.000000000000000000000000000001" ],
+  ]
+
+  max_len = [
+    len(metric_table[0][0]),
+    len(metric_table[0][1]),
+    len(metric_table[0][2]),
+    0
+  ]
+
+  for idx in range(len(metric_table)):
+    for i in range(3):
+      if len(metric_table[idx][i]) > max_len[i]:
+        max_len[i] = len(metric_table[idx][i])
+
+  pfx = "  "
+
+  print("\nMetric prefixes:\n")
+  for idx in range(len(metric_table)):
+    _name = s_pad(metric_table[idx][0], max_len[0])
+    _symb = s_pad(metric_table[idx][1], max_len[1])
+    _base = s_pad(metric_table[idx][2], max_len[2], 'r')
+    _deci = s_pad(metric_table[idx][3], max_len[3])
+    print( pfx + _name, _symb, _base, _deci )
+    if (idx==0): print("")
+  print("")
+
+
+def print_all():
+  print_nato()
+  print_metric()
+
+if    OP == 'all':    print_all()
+elif  OP == 'metric': print_metric()
+elif  OP == 'nato':   print_nato()
+else: print_help()
